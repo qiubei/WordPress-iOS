@@ -385,7 +385,7 @@ static NSString *RestorablePostObjectIDURLKey = @"RestorablePostObjectIDURLKey";
     NSNumber *siteID = self.siteID;
     NSParameterAssert(siteID);
 
-    self.suggestionsTableView = [[SuggestionsTableView alloc] initWithSiteID:siteID suggestionType:SuggestionTypeMention delegate:self];
+    self.suggestionsTableView = [[SuggestionsTableView alloc] initWithSiteID:siteID suggestionType:SuggestionTypeMentions delegate:self];
     [self.suggestionsTableView setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.view addSubview:self.suggestionsTableView];
 }

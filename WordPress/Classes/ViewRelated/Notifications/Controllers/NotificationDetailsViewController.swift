@@ -435,7 +435,7 @@ extension NotificationDetailsViewController {
 
     func setupSuggestionsView() {
         guard let siteID = note.metaSiteID else { return }
-        suggestionsTableView = SuggestionsTableView(siteID: siteID, suggestionType: .mention, delegate: self)
+        suggestionsTableView = SuggestionsTableView(siteID: siteID, suggestionType: .mentions, delegate: self)
         suggestionsTableView.translatesAutoresizingMaskIntoConstraints = false
     }
 

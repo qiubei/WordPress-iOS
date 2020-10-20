@@ -851,7 +851,13 @@ extension GutenbergViewController: GutenbergBridgeDelegate {
 
     func gutenbergDidRequestMention(callback: @escaping (Swift.Result<String, NSError>) -> Void) {
         DispatchQueue.main.async(execute: { [weak self] in
-            self?.showSuggestions(type: .mention, callback: callback)
+            self?.showSuggestions(type: .mentions, callback: callback)
+        })
+    }
+
+    func gutenbergDidRequestXpost(callback: @escaping (Swift.Result<String, NSError>) -> Void) {
+        DispatchQueue.main.async(execute: { [weak self] in
+            self?.showSuggestions(type: .xposts, callback: callback)
         })
     }
 
@@ -882,8 +888,10 @@ extension GutenbergViewController {
         }
 
         switch type {
-        case .mention:
+        case .mentions:
             guard SuggestionService.shared.shouldShowSuggestions(for: blog) else { return }
+        case .xposts:
+            break
         }
 
         previousFirstResponder = view.findFirstResponder()
