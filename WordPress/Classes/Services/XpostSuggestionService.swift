@@ -97,7 +97,7 @@ extension XpostSuggestionService.ServiceError: CustomNSError {
 
     var errorCode: Int { return 0 }
 
-    var errorUserInfo: [String : Any] {
+    var errorUserInfo: [String: Any] {
         switch self {
         case .missingAPI: return [NSDebugDescriptionErrorKey: "Blog hostname not available"]
         case .missingManagedObjectContext: return [NSDebugDescriptionErrorKey: "Managed object context not available"]
