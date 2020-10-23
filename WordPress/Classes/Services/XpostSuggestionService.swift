@@ -20,7 +20,7 @@ struct XpostSuggestionService {
     */
     static func suggestions(for blog: Blog, completion: @escaping (Result<[SiteSuggestion], Error>) -> Void) {
 
-        if let results = retrievePersistedResults(for: blog), results.isEmpty == false {
+        if let results = retrieveSortedPersistedResults(for: blog), results.isEmpty == false {
             completion(.success(results))
         } else if ReachabilityUtils.isInternetReachable() {
             fetchAndPersistSuggestions(for: blog, completion: completion)
@@ -54,11 +54,13 @@ struct XpostSuggestionService {
         api.GET(urlString, parameters: nil) { responseObject, httpResponse in
             do {
                 let data = try JSONSerialization.data(withJSONObject: responseObject)
-
                 try self.purgeExistingResults(for: blog, using: managedObjectContext)
-
-                let siteSuggestions = try self.persist(data: data, to: blog, using: managedObjectContext)
-                completion(.success(siteSuggestions))
+                try self.persist(data: data, to: blog, using: managedObjectContext)
+                guard let suggestions = self.retrieveSortedPersistedResults(for: blog) else {
+                    completion(.failure(ServiceError.noResultsAvailable))
+                    return
+                }
+                completion(.success(suggestions))
             } catch {
                 completion(.failure(error))
             }
@@ -77,18 +79,20 @@ struct XpostSuggestionService {
         try managedObjectContext.save()
     }
 
-    private static func persist(data: Data, to blog: Blog, using managedObjectContext: NSManagedObjectContext) throws -> [SiteSuggestion] {
+    private static func persist(data: Data, to blog: Blog, using managedObjectContext: NSManagedObjectContext) throws {
         let decoder = JSONDecoder()
         decoder.userInfo[CodingUserInfoKey.managedObjectContext] = managedObjectContext
         let siteSuggestions = try decoder.decode([SiteSuggestion].self, from: data)
         blog.siteSuggestions = Set(siteSuggestions)
         try managedObjectContext.save()
-        return siteSuggestions
     }
 
-    private static func retrievePersistedResults(for blog: Blog) -> [SiteSuggestion]? {
-        guard let results = blog.siteSuggestions else { return nil }
-        return Array(results)
+    private static func retrieveSortedPersistedResults(for blog: Blog) -> [SiteSuggestion]? {
+        return blog.siteSuggestions?.sorted(by: { suggestionA, suggestionB in
+            guard let subdomainA = suggestionA.subdomain else { return false }
+            guard let subdomainB = suggestionB.subdomain else { return false }
+            return subdomainA < subdomainB
+        })
     }
 }
 
