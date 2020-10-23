@@ -47,7 +47,7 @@ extension SuggestionType {
         case (.mentions, let suggestion as UserSuggestion):
             title = suggestion.username
         case (.xposts, let suggestion as SiteSuggestion):
-            title = suggestion.title
+            title = suggestion.subdomain
         default:
             return nil
         }
@@ -59,7 +59,7 @@ extension SuggestionType {
         case (.mentions, let suggestion as UserSuggestion):
             return suggestion.displayName
         case (.xposts, let suggestion as SiteSuggestion):
-            return suggestion.siteURL?.absoluteString
+            return suggestion.title
         default:
             return nil
         }
