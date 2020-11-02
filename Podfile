@@ -1,5 +1,9 @@
 source 'https://cdn.cocoapods.org/'
 
+unless ['BUNDLE_BIN_PATH', 'BUNDLE_GEMFILE'].any? { |k| ENV.key?(k) }
+  raise 'Please run CocoaPods via `bundle exec`'
+end
+
 inhibit_all_warnings!
 use_frameworks!
 
@@ -37,8 +41,7 @@ def wordpress_ui
 end
 
 def wordpress_kit
-
-    pod 'WordPressKit', '~> 4.19-beta.1'
+    pod 'WordPressKit', '~> 4.20.0-beta.1'
     #pod 'WordPressKit', :git => 'https://github.com/wordpress-mobile/WordPressKit-iOS.git', :tag => ''
     #pod 'WordPressKit', :git => 'https://github.com/wordpress-mobile/WordPressKit-iOS.git', :branch => ''
     #pod 'WordPressKit', :git => 'https://github.com/wordpress-mobile/WordPressKit-iOS.git', :commit => ''
@@ -149,7 +152,7 @@ target 'WordPress' do
     ## Gutenberg (React Native)
     ## =====================
     ##
-    gutenberg :commit => '1f5c73d27d744a375cdf81ae6ac851ba4bd86a27'
+    gutenberg :tag => 'v1.40.0'
 
     ## Third party libraries
     ## =====================
@@ -167,6 +170,7 @@ target 'WordPress' do
     pod 'FSInteractiveMap', :git => 'https://github.com/wordpress-mobile/FSInteractiveMap.git', :tag => '0.2.0'
     pod 'JTAppleCalendar', '~> 8.0.2'
     pod 'AMScrollingNavbar', '5.6.0'
+    pod 'CropViewController', '2.5.3'
 
     ## Automattic libraries
     ## ====================
@@ -192,7 +196,7 @@ target 'WordPress' do
 
     pod 'Gridicons', '~> 1.0.1'
 
-    pod 'WordPressAuthenticator', '~> 1.27.0-beta'
+    pod 'WordPressAuthenticator', '~> 1.27.0'
     # While in PR
     # pod 'WordPressAuthenticator', :git => 'https://github.com/wordpress-mobile/WordPressAuthenticator-iOS.git', :branch => ''
     # pod 'WordPressAuthenticator', :git => 'https://github.com/wordpress-mobile/WordPressAuthenticator-iOS.git', :commit => ''
@@ -366,7 +370,7 @@ end
 ## ===================
 ##
 def wordpress_mocks
-  pod 'WordPressMocks', '~> 0.0.9-beta.1'
+  pod 'WordPressMocks', '~> 0.0.9'
   # pod 'WordPressMocks', :git => 'https://github.com/wordpress-mobile/WordPressMocks.git', :commit => ''
   # pod 'WordPressMocks', :git => 'https://github.com/wordpress-mobile/WordPressMocks.git', :branch => ''
   # pod 'WordPressMocks', :path => '../WordPressMocks'
